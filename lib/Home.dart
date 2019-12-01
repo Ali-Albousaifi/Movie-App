@@ -1,20 +1,22 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:movieapp1/Brave%20Heart.dart';
-import 'package:movieapp1/Enemy%20at%20the%20gates.dart';
-import 'package:movieapp1/Fast&Farious.dart';
-import 'package:movieapp1/Hitman.dart';
-import 'package:movieapp1/Joker.dart';
-import 'package:movieapp1/Mission%20Impossible.dart';
-import 'package:movieapp1/Need%20for%20speed.dart';
-import 'package:movieapp1/The%20Vow.dart';
-import 'package:movieapp1/Transporter%203.dart';
-import 'package:movieapp1/Twilight.dart';
-import 'package:movieapp1/fifty%20shades%20darker.dart';
-import 'package:movieapp1/the%20Expandables%202.dart';
+import 'package:movieapp1/Angel%20Has%20Fallen.dart';
+import 'package:movieapp1/Ford%20v%20Ferrari.dart';
+import 'package:movieapp1/Hustlers.dart';
+import 'package:movieapp1/It%20Chapter%20Two.dart';
+import 'package:movieapp1/Knives%20Out.dart';
+import 'package:movieapp1/One%20Piece%20Stampede.dart';
+import 'package:movieapp1/Ready%20or%20Not.dart';
+import 'package:movieapp1/Red%20Shoes%202019.dart';
+import 'package:movieapp1/The%20lrishman.dart';
+import 'Module/MovieHome.dart';
+import 'Parasite.dart';
+import 'Terminator.dart';
+
+import 'Frozen II.dart';
+
 import 'Movies.dart';
+import 'API/MovieApi.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -22,28 +24,23 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
+  Movie_Api api = Movie_Api();
+
   List<Movies> movies = [
-    Movies(
-        'Fast & Farious', 'assets/images/fast&farious 8.jpg', FastAndFarious()),
-    Movies('Joker', 'assets/images/joker.jpg', Joker()),
-    Movies('Mission Impossible', 'assets/images/missionImpossible.jpg',
-        MissionImpossible()),
-    Movies('The Expandables 2', 'assets/images/the Expandables 2.jpg',
-        TheExpandables()),
-    Movies('Braveheart', 'assets/images/Braveheart.jpg', BraveHeart()),
-    Movies('Fifty Shades Darker', 'assets/images/fifty shades darker.jpg',
-        FiftyShadesDarker()),
-    Movies('Transporter 3', 'assets/images/transporter 3.jpg', Transporter()),
-    Movies('Enemy at the Gates', 'assets/images/enemy at the gates.jpg',
-        EnemyAtTheGates()),
-    Movies('Hitman', 'assets/images/hitman.jpg', Hitman()),
-    Movies(
-        'Need For Speed', 'assets/images/need for speed.jpg', NeedForSpeed()),
-
-        Movies('The Vow', 'assets/images/the vow.jpg', TheVow()),
-
-        Movies('The Twiligt', 'assets/images/Twilight.jpg', Twilight())
+    Movies(Frozen()),
+    Movies(Terminator()),
+    Movies(TheLirshman()),
+    Movies(Hustlers()),
+    Movies(AngelHasFallen()),
+    Movies(KnivesOut()),
+    Movies(ItChapterTwo()),
+    Movies(ReadyorNot()),
+    Movies(OnePieceStampede()),
+    Movies(FordvsFerrari()),
+    Movies(RedShoes2019()),
+    Movies(Parasite()),
   ];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -56,46 +53,52 @@ class _Home extends State<Home> {
             crossAxisCount: 2,
           ),
           itemBuilder: (context, index) {
-            return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return movies[index].detials;
-                    }),
-                  );
-                },
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      width: double.infinity,
-                      height: 200,
-                      child: Image.asset(
-                        movies[index].image,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                          width: double.infinity,
-                          //height: 25,
-                          child: Wrap(
-                            children: <Widget>[
-                              Text(
-                                movies[index].title,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 20),
-                              ),
-                            ],
-                          )),
-                    )
-                  ],
-                ));
+            return FutureBuilder(
+                future: api.fetchAllMovie(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  MovieHome movieHome = snapshot.data[index];
+                  return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return movies[index].detials;
+                          }),
+                        );
+                      },
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            width: double.infinity,
+                            height: 200,
+                            child: Image.network(
+                              'https://image.tmdb.org/t/p/w500/' +
+                                  movieHome.poster_path,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                                width: double.infinity,
+                                //height: 25,
+                                child: Wrap(
+                                  children: <Widget>[
+                                    Text(
+                                      movieHome.title,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 20),
+                                    ),
+                                  ],
+                                )),
+                          )
+                        ],
+                      ));
+                });
           },
-          itemCount: movies.length,
+          itemCount: 12,
         ));
   }
 }
