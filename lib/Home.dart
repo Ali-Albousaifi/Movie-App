@@ -1,104 +1,125 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:movieapp1/Angel%20Has%20Fallen.dart';
-import 'package:movieapp1/Ford%20v%20Ferrari.dart';
-import 'package:movieapp1/Hustlers.dart';
-import 'package:movieapp1/It%20Chapter%20Two.dart';
-import 'package:movieapp1/Knives%20Out.dart';
-import 'package:movieapp1/One%20Piece%20Stampede.dart';
-import 'package:movieapp1/Ready%20or%20Not.dart';
-import 'package:movieapp1/Red%20Shoes%202019.dart';
-import 'package:movieapp1/The%20lrishman.dart';
-import 'Module/MovieHome.dart';
-import 'Parasite.dart';
-import 'Terminator.dart';
+import 'package:movieapp1/Module/navigation.dart';
 
-import 'Frozen II.dart';
 
-import 'Movies.dart';
-import 'API/MovieApi.dart';
+import 'package:movieapp1/popular_movies.dart';
+import 'API/Utilities.dart';
+import 'package:movieapp1/API/APIS.dart';
 
 class Home extends StatefulWidget {
+  
   @override
   _Home createState() => _Home();
 }
 
+enum popMenue { favorite }
+
 class _Home extends State<Home> {
-  Movie_Api api = Movie_Api();
-
-  List<Movies> movies = [
-    Movies(Frozen()),
-    Movies(Terminator()),
-    Movies(TheLirshman()),
-    Movies(Hustlers()),
-    Movies(AngelHasFallen()),
-    Movies(KnivesOut()),
-    Movies(ItChapterTwo()),
-    Movies(ReadyorNot()),
-    Movies(OnePieceStampede()),
-    Movies(FordvsFerrari()),
-    Movies(RedShoes2019()),
-    Movies(Parasite()),
-  ];
   
-
+List<int> _favourites=[];
+  
+  
+  
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Movie Trends'),
+          title: Text('popular Movies'),
+          centerTitle: true,
+          
         ),
-        body: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+          drawer:Drawer(
+            child: navigationDrawer(),
           ),
-          itemBuilder: (context, index) {
-            return FutureBuilder(
-                future: api.fetchAllMovie(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  MovieHome movieHome = snapshot.data[index];
-                  return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return movies[index].detials;
-                          }),
-                        );
-                      },
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                            width: double.infinity,
-                            height: 200,
-                            child: Image.network(
-                              'https://image.tmdb.org/t/p/w500/' +
-                                  movieHome.poster_path,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
+        body:
+         
+         FutureBuilder(
+            future: MoviePages.fetchPopularMovies(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.data == null) {
+                return _loading();
+              } else {
+                return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      PopularMovies(data:snapshot.data[index])),
+                            );
+                          },
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
                                 width: double.infinity,
-                                //height: 25,
-                                child: Wrap(
-                                  children: <Widget>[
-                                    Text(
-                                      movieHome.title,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w900,
-                                          fontSize: 20),
-                                    ),
-                                  ],
-                                )),
-                          )
-                        ],
-                      ));
-                });
-          },
-          itemCount: 12,
-        ));
+                                height: 200,
+                                child: Image.network(
+                                  baseUrlImage +
+                                      snapshot.data[index].poster_path,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 145),
+                                child: IconButton(
+                                  iconSize: 25,
+                                  icon: Icon(Icons.favorite),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (_favourites.contains(index)) {
+                                        _favourites.remove(index);
+                                      } else {
+                                        _favourites.add(index);
+                                      }
+                                    });
+                                  },
+                                  color: (_favourites.contains(index))
+                                      ? Colors.red
+                                      : Colors.grey,
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                    width: double.infinity,
+                                    //height: 25,
+                                    child: Wrap(
+                                      children: <Widget>[
+                                        Text(
+                                          snapshot.data[index].title,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 20),
+                                        ),
+                                      ],
+                                    )),
+                              )
+                            ],
+                          ));
+                    },
+                    itemCount: snapshot.data.length);
+              }
+            }));
+
+           
   }
+
+  Widget _loading() {
+    return Container(
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
 }

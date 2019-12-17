@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:movieapp1/AppTheme.dart';
 
-import 'Home.dart';
+
+
+import 'Welcome.dart';
+
+
+
+
 
 void main() => runApp(MovieApp());
 
@@ -11,12 +17,16 @@ class MovieApp extends StatefulWidget {
 }
 
 class _MovieAppState extends State<MovieApp> {
+
+    
+    
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme().theme,
-      home: Home(),
+      home: Welcome(),
     );
   }
 }
