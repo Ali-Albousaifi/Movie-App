@@ -4,13 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movieapp1/Module/navigation.dart';
 
-
-import 'package:movieapp1/popular_movies.dart';
+import 'package:movieapp1/MovieDetails.dart';
 import 'API/Utilities.dart';
 import 'package:movieapp1/API/APIS.dart';
 
 class Home extends StatefulWidget {
-  
   @override
   _Home createState() => _Home();
 }
@@ -18,31 +16,40 @@ class Home extends StatefulWidget {
 enum popMenue { favorite }
 
 class _Home extends State<Home> {
-  
-List<int> _favourites=[];
-  
-  
-  
-  
+  List<int> _favourites = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text('popular Movies'),
           centerTitle: true,
-          
-        ),
-          drawer:Drawer(
-            child: navigationDrawer(),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: <Color>
+                [
+                  Colors.red,
+                  Colors.indigo
+                ]
+              )
+            ),
           ),
-        body:
-         
-         FutureBuilder(
+        ),
+        drawer: Drawer(
+          child: navigationDrawer(),
+        ),
+        body: FutureBuilder(
             future: MoviePages.fetchPopularMovies(),
             builder: (context, AsyncSnapshot snapshot) {
-              if (snapshot.data == null) {
+              if(snapshot.data==null)
+              {
                 return _loading();
-              } else {
+              }
+              
+              else {
                 return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -53,8 +60,8 @@ List<int> _favourites=[];
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      PopularMovies(data:snapshot.data[index])),
+                                  builder: (context) => PopularMovies(
+                                      data: snapshot.data[index])),
                             );
                           },
                           child: Stack(
@@ -109,9 +116,9 @@ List<int> _favourites=[];
                     },
                     itemCount: snapshot.data.length);
               }
-            }));
 
-           
+              
+            }));
   }
 
   Widget _loading() {
@@ -122,4 +129,7 @@ List<int> _favourites=[];
     );
   }
 
+
+
+  
 }

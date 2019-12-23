@@ -18,8 +18,7 @@ class MovieApp extends StatefulWidget {
 
 class _MovieAppState extends State<MovieApp> {
 
-    
-    
+
 
   @override
   Widget build(BuildContext context) {

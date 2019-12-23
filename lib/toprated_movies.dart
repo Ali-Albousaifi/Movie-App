@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:movieapp1/Module/navigation.dart';
 
 
-import 'package:movieapp1/popular_movies.dart';
+import 'package:movieapp1/MovieDetails.dart';
 import 'API/Utilities.dart';
 import 'package:movieapp1/API/APIS.dart';
 
@@ -30,7 +30,18 @@ List<int> _favourites=[];
         appBar: AppBar(
           title: Text('Top Rated'),
           centerTitle: true,
-          
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: <Color>
+                [
+                  Colors.lightBlue,
+                  Colors.purpleAccent
+                ]
+                
+              )
+            ),
+          ),
         ),
           drawer:Drawer(
             child: navigationDrawer(),

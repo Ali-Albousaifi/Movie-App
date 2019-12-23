@@ -4,7 +4,7 @@ import 'package:movieapp1/now_playing.dart';
 import 'package:movieapp1/toprated_movies.dart';
 import 'package:movieapp1/up_coming.dart';
 
-import '../popular_movies.dart';
+import '../MovieDetails.dart';
 
 class MenueItem {
   String title;
@@ -46,7 +46,7 @@ Widget navigationDrawer()
 }
 
 List<MenueItem> pages=[
-  
+  MenueItem("Popular Movies",()=> Home()),
   MenueItem('TopRated',()=> TopRatedMovies()),
   MenueItem('Now Playing',()=> NowPlayingMovies()),
   MenueItem('up Coming',()=> UpComingMovies())

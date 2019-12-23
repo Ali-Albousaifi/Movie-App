@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:movieapp1/Module/navigation.dart';
 
 
-import 'package:movieapp1/popular_movies.dart';
+import 'package:movieapp1/MovieDetails.dart';
 import 'API/Utilities.dart';
 import 'package:movieapp1/API/APIS.dart';
 
@@ -31,7 +31,19 @@ List<int> _favourites=[];
         appBar: AppBar(
           title: Text('Now Playing'),
           centerTitle: true,
-          
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.topRight,
+                colors: <Color>
+                [
+                  Colors.teal,
+                  Colors.redAccent
+                ]
+              )
+            ),
+          ),
         ),
           drawer:Drawer(
             child: navigationDrawer(),

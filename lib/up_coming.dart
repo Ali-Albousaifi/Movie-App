@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:movieapp1/Module/navigation.dart';
 
 
-import 'package:movieapp1/popular_movies.dart';
+import 'package:movieapp1/MovieDetails.dart';
 import 'API/Utilities.dart';
 import 'package:movieapp1/API/APIS.dart';
 
@@ -29,9 +29,19 @@ List<int> _favourites=[];
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Up Coming Movies'),
+          title: Text('Up Coming'),
           centerTitle: true,
-          
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: <Color>
+                [
+                  Colors.redAccent,
+                  Colors.black
+                ]
+              )
+            ),
+          ),
         ),
           drawer:Drawer(
             child: navigationDrawer(),

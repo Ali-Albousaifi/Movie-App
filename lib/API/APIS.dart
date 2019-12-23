@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+
 import 'package:flutter/cupertino.dart';
 import 'package:movieapp1/Module/Movie.dart';
 import 'package:http/http.dart' as http;
@@ -135,5 +136,11 @@ class MoviePages {
         return similar;
       }
     }
+    
   }
+
+  
+
 }
+
+
